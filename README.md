@@ -1,3 +1,4 @@
+
 # ESPUI Serial MQTT Template
 
 ## What is the purpose of this code ?
@@ -41,3 +42,58 @@ When the ESP is powered ON, it will :
  - [PubSubClient](https://github.com/knolleary/pubsubclient)
 
 ## Usage
+
+Like for a regular Arduino code you can import libraries, define some global variables and put code in the *setup* and *main* functions.
+
+**Avoid** using the *delay()* function in the loop ! The code should not be blocked for a long period of time as the ESPUI and MQTT functions needs to be called regularly. Instead, use the *millis()* function to create non blocking delays.
+
+To subscribe to MQTT topics add the following line in the **reconnect()** function in *WiFiMQTT.ino*.
+
+```
+client.subscribe("demo_topic");
+```
+
+You can modify the **mqtt_callback()** function in *Callback.ino* to respond to MQTT commands. 
+
+```
+if(topic == "demo_topic"){
+    client.publish("response_topic", "PONG")
+    Serial.printl("Hello World")
+}
+``` 
+
+You can add Serial commands by using the following template in the **SerialSetup()** function :
+
+```
+else if (input.indexOf("custom_cmd") > -1) {
+   String demo_cmd = splitString(input, ' ', 1); //Get the command (String)
+   Serial.println(demo_cmd); //Print the command
+   preferences.putString("demo", "demo_cmd"); //Save the value in the Flash memory
+ }
+```
+
+The GUI can be modified to add buttons, sliders, text input/output, tabs, ... (see [ESPUI documentation](https://github.com/s00500/ESPUI) by modifying the **espui_init()** function in *ESPUI.ino*
+
+```
+auto demo_tab = ESPUI.addControl(Tab, "", "demo");
+auto demo_button = ESPUI.addControl(Button, "", "Button", None, demo_tab, textCallback);
+```
+
+Variables can be restored from the Flash memory by using the [Preferences library](https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/api/preferences.html). Custom preferences can be added in the **wifi_init()** function in WiFiMQTT.ino.
+
+```
+int demo_last_reading = preferences.getInt("last_reading", 0);
+```
+
+## Serial commands
+
+|Command|Value/function|Example|
+|--|--|--|
+| ssid | [text] | ssid mywifi |
+| password | [text] | password mysecretpassword|
+| mqtt | broker ip | mqtt 192.168.1.10 | 
+| topicin | mqtt (subcribe) topic| topicin demo_in | 
+| topicout | mqtt (publish) topic| topic demo_out | 
+| mqtten | enable/disable MQTT| mqtten 1 or mqtten 0| 
+| restart | [restart the ESP]| restart |
+| info | [print all the settings] | info (will not print WiFi password) |
