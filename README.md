@@ -41,11 +41,47 @@ When the ESP is powered ON, it will :
  - [Preferences](https://github.com/vshymanskyy/Preferences) (for ESP8266)
  - [PubSubClient](https://github.com/knolleary/pubsubclient)
 
+## Default GUI
+
+You can access the GUI by copying the IP address printed in the serial at startup (or **192.168.4.1** if the ESP did not manage to connect to an existing WiFi).
+There is two tabs by default. 
+
+The first tab display the serial output and give information about the system.
+
+<img src="https://github.com/n3odym3/ESPUI_Serial_MQTT_Template/blob/main/img/maintab.PNG" width="40%">
+
+You can print custom text/value on the debug by using the following code.
+
+```
+ESPUI.print(statusLabelId, "Custom text");
+```
+
+The second tab allows to setup the WiFi and MQTT (don't forget to save the settings)
+
+<img src="https://github.com/n3odym3/ESPUI_Serial_MQTT_Template/blob/main/img/wifitab.PNG" width="100%">
+
 ## Usage
 
 Like for a regular Arduino code you can import libraries, define some global variables and put code in the *setup* and *main* functions.
 
 **Avoid** using the *delay()* function in the loop ! The code should not be blocked for a long period of time as the ESPUI and MQTT functions needs to be called regularly. Instead, use the *millis()* function to create non blocking delays.
+
+
+You can add Serial commands by using the following template in the **SerialSetup()** function :
+
+```
+else if (input.indexOf("custom_cmd") > -1) {
+   String demo_cmd = splitString(input, ' ', 1); //Get the command (String)
+   Serial.println(demo_cmd); //Print the command
+   preferences.putString("demo", "demo_cmd"); //Save the value in the Flash memory
+ }
+ ```
+ 
+ Don't forget to change the name of the device.
+ 
+ ```
+ const char* hostname = "ESPUI-Demo";
+ ```
 
 To subscribe to MQTT topics add the following line in the **reconnect()** function in *WiFiMQTT.ino*.
 
@@ -61,16 +97,6 @@ if(topic == "demo_topic"){
     Serial.printl("Hello World")
 }
 ``` 
-
-You can add Serial commands by using the following template in the **SerialSetup()** function :
-
-```
-else if (input.indexOf("custom_cmd") > -1) {
-   String demo_cmd = splitString(input, ' ', 1); //Get the command (String)
-   Serial.println(demo_cmd); //Print the command
-   preferences.putString("demo", "demo_cmd"); //Save the value in the Flash memory
- }
-```
 
 The GUI can be modified to add buttons, sliders, text input/output, tabs, ... (see [ESPUI documentation](https://github.com/s00500/ESPUI) by modifying the **espui_init()** function in *ESPUI.ino*
 
@@ -97,3 +123,23 @@ int demo_last_reading = preferences.getInt("last_reading", 0);
 | mqtten | enable/disable MQTT| mqtten 1 or mqtten 0| 
 | restart | [restart the ESP]| restart |
 | info | [print all the settings] | info (will not print WiFi password) |
+
+## Examples
+
+Battery monitoring system 
+
+<img src="https://github.com/n3odym3/ESPUI_Serial_MQTT_Template/blob/main/img/battery.png" width="75%">
+
+Motor controller 
+
+<img src="https://github.com/n3odym3/ESPUI_Serial_MQTT_Template/blob/main/img/motor.PNG" width="75%">
+
+LED driver
+
+<img src="https://github.com/n3odym3/ESPUI_Serial_MQTT_Template/blob/main/img/led.PNG" width="100%">
+
+Infrared remote cloner (see [this project](https://github.com/n3odym3/MQTT_IR_Cloner))
+
+<img src="https://github.com/n3odym3/MQTT_IR_Cloner/blob/master/Img/IRControl.PNG" width="100%">
+
+
