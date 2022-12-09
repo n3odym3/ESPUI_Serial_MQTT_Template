@@ -13,10 +13,10 @@ void mqtt_callback(String topic, byte *message, unsigned int length) {
   }
   Serial.println(messageTemp);
 
-  if(topic == "demo_topic"){
-    client.publish("response_topic", "PONG");
-    Serial.println("Hello World");
-  }
+  //if(topic == "demo_topic"){
+  //  client.publish("response_topic", "PONG");
+  //  Serial.println("Hello World");
+  //}
 
   //Custom action................................................
   //Your code HERE !
