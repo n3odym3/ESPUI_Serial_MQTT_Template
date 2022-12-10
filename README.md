@@ -28,7 +28,7 @@ When the ESP is powered ON, it will :
 	- Run the code in the loop function
 - If the ESP **is not** connected to the WiFi 
 	- Create an access point (you can connect you smartphone to the acces point to have access to the GUI at **192.168.4.1**)
-	- Run the code in the loop fonction
+	- Run the code in the loop function
 
 ## Dependencies 
 
@@ -44,7 +44,7 @@ When the ESP is powered ON, it will :
 ## Default GUI
 
 You can access the GUI by copying the IP address printed in the serial at startup (or **192.168.4.1** if the ESP did not manage to connect to an existing WiFi).
-There is two tabs by default. 
+There are two tabs by default. 
 
 The first tab display the serial output and give information about the system.
 
@@ -64,7 +64,7 @@ The second tab allows to setup the WiFi and MQTT (don't forget to save the setti
 
 Like for a regular Arduino code you can import libraries, define some global variables and put code in the *setup* and *main* functions.
 
-**Avoid** using the *delay()* function in the loop ! The code should not be blocked for a long period of time as the ESPUI and MQTT functions needs to be called regularly. Instead, use the *millis()* function to create non blocking delays.
+**Avoid** using the *delay()* function in the loop ! The code should not be blocked for a long period of time as the ESPUI and MQTT functions needs to be called regularly. Instead, use the *millis()* function to create non-blocking delays.
 
 
 You can add Serial commands by using the following template in the **SerialSetup()** function :
