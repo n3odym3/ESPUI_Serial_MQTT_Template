@@ -66,6 +66,18 @@ Like for a regular Arduino code you can import libraries, define some global var
 
 **Avoid** using the *delay()* function in the loop ! The code should not be blocked for a long period of time as the ESPUI and MQTT functions needs to be called regularly. Instead, use the *millis()* function to create non-blocking delays.
 
+```
+[In global]
+unsigned long start_count = 0; //last millis() value
+unsigned long custom_delay = 5000; //5sec delay
+
+[In loop]
+if (millis() - start_count >= custom_delay) {
+	DoSomething(); // The action to perform every 5sec
+	start_count = millis();  // reset the timer
+}
+```
+
 
 You can add Serial commands by using the following template in the **SerialSetup()** function :
 
