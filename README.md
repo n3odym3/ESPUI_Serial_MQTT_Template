@@ -129,7 +129,9 @@ int demo_last_reading = preferences.getInt("last_reading", 0);
 |--|--|--|
 | ssid | [text] | ssid mywifi |
 | password | [text] | password mysecretpassword|
-| mqtt | broker ip | mqtt 192.168.1.10 | 
+| mqttserver | broker ip | mqttserver 192.168.1.10 | 
+| mqttuser | mqtt username | mqttuser itsme | 
+| mqttpass | mqtt password | mqttpass anotherpassword | 
 | topicin | mqtt (subcribe) topic| topicin demo_in | 
 | topicout | mqtt (publish) topic| topic demo_out | 
 | mqtten | enable/disable MQTT| mqtten 1 or mqtten 0| 
