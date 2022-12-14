@@ -3,6 +3,8 @@ void wifi_init() {
   stored_ssid = preferences.getString("ssid", "SSID");
   stored_pass = preferences.getString("pass", "PASSWORD");
   stored_mqtt_server = preferences.getString("mqtt_server", "192.168.1.10");
+  stored_mqtt_user = preferences.getString("mqtt_user", "");
+  stored_mqtt_pass = preferences.getString("mqtt_pass", "");
   stored_mqtt_topic_in = preferences.getString("mqtt_topic_in", "demo/in");
   stored_mqtt_topic_out = preferences.getString("mqtt_topic_out", "demo/out");
   mqtt_enabled = preferences.getBool("mqtt_enabled", false);
@@ -45,7 +47,7 @@ void mqtt_loop() {
       reconnect();
       return;
     }
-    client.loop(); 
+    client.loop();
   }
 }
 //MQTT LOOP===================================
@@ -55,7 +57,7 @@ void reconnect() {
   if (millis() - last_millis > mqtt_retry_delay) {
     Serial.println("MQTT connection to : " + stored_mqtt_server);
     ESPUI.print(statusLabelId, "MQTT connection to : " + stored_mqtt_server);
-    if (client.connect(hostname)) {
+    if (client.connect(hostname, stored_mqtt_user.c_str(), stored_mqtt_pass.c_str())) {
       Serial.println("MQTT connected !");
       ESPUI.print(statusLabelId, "MQTT connected !");
 
