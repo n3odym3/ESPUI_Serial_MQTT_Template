@@ -13,10 +13,10 @@ void mqtt_callback(String topic, byte *message, unsigned int length) {
   }
   Serial.println(messageTemp);
 
-  //if(topic == "demo_topic"){
-  //  client.publish("response_topic", "PONG");
-  //  Serial.println("Hello World");
-  //}
+  if (topic == "demo_topic") {
+    client.publish("response_topic", "PONG");
+    Serial.println("Hello World");
+  }
 
   //Custom action................................................
   //Your code HERE !
@@ -38,11 +38,15 @@ void SaveWifiDetailsCallback(Control *sender, int type) {
     stored_mqtt_topic_in = ESPUI.getControl(mqtt_topic_in_text)->value;
     stored_mqtt_topic_out = ESPUI.getControl(mqtt_topic_out_text)->value;
     stored_mqtt_server = String(ESPUI.getControl(mqtt_server_text)->value);
+    stored_mqtt_user = String(ESPUI.getControl(mqtt_user_text)->value);
+    stored_mqtt_pass = String(ESPUI.getControl(mqtt_pass_text)->value);
     mqtt_enabled = ESPUI.getControl(mqtt_enabled_switch)->value.toInt() ? true : false;
 
     preferences.putString("ssid", stored_ssid);
     preferences.putString("pass", stored_pass);
     preferences.putString("mqtt_server", stored_mqtt_server);
+    preferences.putString("mqtt_user", stored_mqtt_user);
+    preferences.putString("mqtt_pass", stored_mqtt_pass);
     preferences.putString("mqtt_topic_in", stored_mqtt_topic_in);
     preferences.putString("mqtt_topic_out", stored_mqtt_topic_out);
     preferences.putBool("mqtt_enabled", mqtt_enabled);
@@ -50,6 +54,8 @@ void SaveWifiDetailsCallback(Control *sender, int type) {
     Serial.println(stored_ssid);
     Serial.println(stored_pass);
     Serial.println(stored_mqtt_server);
+    Serial.println(stored_mqtt_user);
+    Serial.println(stored_mqtt_pass);
     Serial.println(stored_mqtt_topic_in);
     Serial.println(stored_mqtt_topic_out);
     Serial.println(mqtt_enabled);
@@ -87,10 +93,22 @@ void SerialSetup(String input) {
     Serial.println("MQTT enabled : " + String(mqtt_enabled));
   }
 
-  else if (input.indexOf("mqtt") > -1) {
+  else if (input.indexOf("mqttserver") > -1) {
     stored_mqtt_server = splitString(input, ' ', 1);
     preferences.putString("mqtt_server", stored_mqtt_server);
     Serial.println("New MQTT server : " + stored_mqtt_server);
+  }
+
+  else if (input.indexOf("mqttuser") > -1) {
+    stored_mqtt_user = splitString(input, ' ', 1);
+    preferences.putString("mqtt_user", stored_mqtt_user);
+    Serial.println("New MQTT user : " + stored_mqtt_user);
+  }
+
+  else if (input.indexOf("mqttpass") > -1) {
+    stored_mqtt_pass = splitString(input, ' ', 1);
+    preferences.putString("mqtt_pass", stored_mqtt_pass);
+    Serial.println("New MQTT pass : " + stored_mqtt_pass);
   }
 
   else if (input.indexOf("topicin") > -1) {
@@ -112,6 +130,7 @@ void SerialSetup(String input) {
   else if (input.indexOf("info") > -1) {
     Serial.println("SSID " + stored_ssid);
     Serial.println("MQTT server " + stored_mqtt_server);
+    Serial.println("MQTT user " + stored_mqtt_user);
     Serial.println("MQTT enabled " + String(mqtt_enabled));
     Serial.println("Topic IN " + stored_mqtt_topic_in);
     Serial.println("Topic OUT " + stored_mqtt_topic_out);
