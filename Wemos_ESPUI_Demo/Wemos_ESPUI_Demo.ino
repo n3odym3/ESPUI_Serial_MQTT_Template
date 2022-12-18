@@ -19,7 +19,7 @@
 #include <Preferences.h>
 Preferences preferences;
 #include <DNSServer.h>
-const byte DNS_PORT = 53;
+#define DNS_PORT 53
 IPAddress apIP(192, 168, 4, 1);
 DNSServer dnsServer;
 const char* hostname = "ESPUI-Demo";
@@ -30,7 +30,7 @@ bool wificonnected = false;
 #include <PubSubClient.h>
 WiFiClient espClient;
 PubSubClient client(espClient);
-int mqtt_retry_delay = 10000;
+#define mqtt_retry_delay 10000
 unsigned long last_millis = 0;
 //MQTT=========================
 
